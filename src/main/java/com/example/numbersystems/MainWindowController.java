@@ -113,8 +113,212 @@ public class MainWindowController implements Initializable{
      * @return The converted number in string.
      */
     public String baseConversion(String num, int base_from, int base_to) {
-        // Converts num to target base
-        return Integer.toString(Integer.parseInt(num, base_from), base_to);
+        if(base_from == 2) {
+            //Case Binary
+            if(base_to == 2) {
+                // Binary to Binary conversion will yield same string
+                return num;
+            }
+            else if(base_to == 10) {
+                // Converts Binary to Decimal
+                return binaryToDecimal(num);
+            }
+            else if(base_to == 16) {
+                // Converts Binary to Hexadecimal
+                return binaryToHexadecimal(num);
+            }
+        }
+        else if(base_from == 10) {
+            //Case Decimal
+            if(base_to == 2) {
+                // Converts Decimal to Binary
+                return decimalToBinary(num);
+            }
+            else if(base_to == 10) {
+                // Decimal to Decimal conversion will yield same string
+                return num;
+            }
+            else if(base_to == 16) {
+                // Converts Decimal to Hexadecimal
+                return decimalToHexadecimal(num);
+            }
+        }
+        else if(base_from == 16) {
+            //Case Hexadecimal
+            if(base_to == 2) {
+                // Converts Hexadecimal to Binary
+                return hexadecimalToBinary(num);
+            }
+            else if(base_to == 10) {
+                // Converts Hexadecimal to Decimal
+                return hexadecimalToDecimal(num);
+            }
+            else if(base_to == 16) {
+                // Hexadecimal to Hexadecimal will yield same string
+                return num;
+            }
+        }
+
+        // Invalid Case
+        return null;
+    }
+
+    /**
+     * Helper function which converts Binary To Decimal
+     * @param num String Binary to be converted to Decimal
+     * @return the converted number in string
+     */
+    public String binaryToDecimal(String num) {
+        // Initialize decimal value to 0
+        int dec = 0;
+        // Sets current exponent to the leftmost digit
+        int curPower = num.length() - 1;
+        // Loop through the string binary from left to right and perform necessary operation
+        for(int i = 0; i < num.length(); i++) {
+            // Case where binary digit is 1
+            if(num.charAt(i) == '1') {
+                dec += Math.pow(2, curPower);
+                curPower--;
+            }
+            // Case where binary digit is 0
+            else if(num.charAt(i) == '0') {
+                curPower--;
+            }
+            // Case where binary digit is neither 1 or 0
+            else {
+                // Invalid Input
+                inputError();
+            }
+        }
+        // Converts integer to string to return
+        return Integer.toString(dec);
+    }
+
+    /**
+     * Helper function which converts Binary To Hexadecimal
+     * @param num String Binary to be converted to Hexadecimal
+     * @return the converted number in string
+     */
+    public String binaryToHexadecimal(String num) {
+        // Convert to Decimal
+        num = binaryToDecimal(num);
+        // Convert Decimal To Hexadecimal and return
+        return decimalToHexadecimal(num);
+    }
+
+    /**
+     * Helper function which converts Decimal To Binary
+     * @param num String Decimal to be converted to Binary
+     * @return the converted number in string
+     */
+    public String decimalToBinary(String num) {
+        // Convert string number to integer
+        int dec = Integer.parseInt(num);
+        // Initialize StringBuilder that will contain final converted number
+        StringBuilder newNum = new StringBuilder();
+        // Repeatedly divide and convert remainder to string until decimal reaches 0
+        // String will be in reverse
+        while(dec != 0) {
+            newNum.append(dec % 2);
+            dec /= 2;
+        }
+        // Reverses string to achieve correct output before return
+        return newNum.reverse().toString();
+    }
+
+    /**
+     * Helper function which converts Decimal To Hexadecimal
+     * @param num String Decimal to be converted to Hexadecimal
+     * @return the converted number in string
+     */
+    public String decimalToHexadecimal(String num) {
+        // Convert string number to integer
+        int dec = Integer.parseInt(num);
+        // Initialize StringBuilder that will contain final converted number
+        StringBuilder newNum = new StringBuilder();
+        // Repeatedly divide and convert remainder to string until decimal reaches 0
+        // String will be in reverse
+        while(dec != 0) {
+            // Makes use of convertIntToHexChar function to get appropriate hex character from its integer value
+            newNum.append(convertIntToHexChar(dec % 16));
+            dec /= 16;
+        }
+        // Reverses string to achieve correct output before return
+        return newNum.reverse().toString();
+    }
+
+    /**
+     * Helper function which converts Hexadecimal To Binary
+     * @param num String Hexadecimal to be converted to Binary
+     * @return the converted number in string
+     */
+    public String hexadecimalToBinary(String num) {
+        // Convert Hexadecimal to Decimal
+        num = hexadecimalToDecimal(num);
+        // Convert Decimal to Binary
+        return decimalToBinary(num);
+    }
+
+    /**
+     * Helper function which converts Hexadecimal To Decimal
+     * @param num String Hexadecimal to be converted to Decimal
+     * @return the converted number in string
+     */
+    public String hexadecimalToDecimal(String num) {
+        // Initialize decimal value to 0
+        int dec = 0;
+        // Sets current exponent to the leftmost digit
+        int curPower = num.length() - 1;
+        // Loop through the string hexadecimal from left to right and perform necessary operation
+        for(int i = 0; i < num.length(); i++) {
+            // Makes use of convertCharToHexInt function to get appropriate integer value from its hex character
+            dec += (convertCharToHexInt(num.charAt(i))) * Math.pow(16, curPower);
+            curPower--;
+        }
+        // Converts integer to string before return
+        return Integer.toString(dec);
+    }
+
+    /**
+     * Helper function which converts integer value to its equivalent hexadecimal character
+     * @param num the integer to be converted
+     * @return the appropriate hexadecimal character
+     */
+    char convertIntToHexChar(int num) {
+        if(num < 10) {
+            // Integers from 0 to 9 can be converted to appropriate HEX characters by adding 48
+            return (char)(num + 48);
+        }
+        else if (num >= 10 && num < 16){
+            // Integers from 10 to 15 can be converted to appropriate HEX characters by adding 55
+            return (char)(num + 55);
+        }
+        else {
+            // If integer exceeds 15, then invalid input
+            inputError();
+            return '#';
+        }
+    }
+
+    /**
+     * Helper function which converts hexadecimal character to its equivalent integer value
+     * @param num the hexadecimal character to be converted
+     * @return the appropriate integer value
+     */
+    int convertCharToHexInt(char num) {
+        if(num >= '0' && num <= '9') {
+            // Characters from '0' to '9' can be converted to appropriate integer value by subtracting 48
+            return num - 48;
+        }
+        else if (num >= 'A' && num <= 'F') {
+            // Characters from 'A' to 'F' can be converted to appropriate integer value by subtracting 55
+            return num - 55;
+        }
+        else {
+            // If char is greater than F, then invalid input;
+            inputError();
+            return '#';
+        }
     }
 
     /**
@@ -135,5 +339,22 @@ public class MainWindowController implements Initializable{
         }
         // Groups the digits by the groupBy value.
         return(num.replaceAll("(.{" + groupBy + "})", "$1 ").trim());
+    }
+
+
+    /**
+     * Function that handles input errors
+     */
+    public void inputError() {
+        // Display on the program Invalid Input to notify users of the error
+        lblSumBin.setText("Invalid Input");
+        lblSumDec.setText("Invalid Input");
+        lblSumHex.setText("Invalid Input");
+        lblProdBin.setText("Invalid Input");
+        lblProdDec.setText("Invalid Input");
+        lblProdHex.setText("Invalid Input");
+
+        // Throws IllegalArgumentException
+        throw new IllegalArgumentException();
     }
 }
