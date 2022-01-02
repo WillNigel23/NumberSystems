@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="400.0" stylesheets="@MainWindowStyles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.numbersystems.MainWindowController">
+<AnchorPane prefHeight="600.0" prefWidth="400.0" stylesheets="@MainWindowStyles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.numbersystems.MainWindowController">
     <children>
         <Label layoutX="26.0" layoutY="40.0" text="First Input" textFill="#c3c3c3">
             <font>

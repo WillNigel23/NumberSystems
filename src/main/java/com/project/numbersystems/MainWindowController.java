@@ -8,7 +8,7 @@
  * @version 1
  */
 
-package com.example.numbersystems;
+package com.project.numbersystems;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;

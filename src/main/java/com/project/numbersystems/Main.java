@@ -8,15 +8,14 @@
  * @version 1
  */
 
-package com.example.numbersystems;
+package com.project.numbersystems;
 
-public class Initialize {
+public class Main {
     /**
-     * Main method. Initializes and runs mainwindow.
+     * Main method. Calls on Initialize to start the program.
      * @param args Command line argument.
      */
     public static void main(String[] args) {
-        MainWindow mainWindow = new MainWindow();
-        mainWindow.run();
+        Initialize.main(args);
     }
 }
